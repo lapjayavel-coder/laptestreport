@@ -49,10 +49,9 @@ function ReportPreview({ customerData, reportData, onClose }) {
         <div className="report-content">
           <div className="report-header">
             <div className="header-top">
-              <div className="logo-placeholder"></div>
+              <img src="/image.png" alt="Lab Logo" className="lab-logo" />
               <div className="lab-title">
-                <h1>SHERIN CLINICAL LAB</h1>
-                <p className="subtitle">SITHI CLINIC & MEDICALS</p>
+                <h1>JAYAVEL CLINICAL LABORATORY</h1>
               </div>
             </div>
           </div>
@@ -183,12 +182,10 @@ function ReportPreview({ customerData, reportData, onClose }) {
             </div>
 
             <div className="contact-info">
-              <p><strong>No.88, TTP Road, Azad Nagar,</strong></p>
-              <p><strong>Muthupet - 614704, Thiruvarur - Dist</strong></p>
+              <p><strong>VTK Complex, Idumbavanam, Thiruvarur - Dist 614703</strong></p>
               <div className="contact-details">
-                <span>📞 04369 299956</span>
-                <span>📞 +91 97886 14530</span>
-                <span>✉ sherinclinicallab@gmail.com</span>
+                <span>📞 9659541930</span>
+                <span>✉ srirammano99@gmail.com</span>
               </div>
             </div>
           </div>

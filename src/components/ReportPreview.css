@@ -75,11 +75,10 @@
   gap: 20px;
 }
 
-.logo-placeholder {
+.lab-logo {
   width: 80px;
   height: 80px;
-  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-  border-radius: 8px;
+  object-fit: contain;
   flex-shrink: 0;
 }
 
@@ -95,13 +94,6 @@
   letter-spacing: 2px;
 }
 
-.lab-title .subtitle {
-  font-size: 14px;
-  color: #1e293b;
-  margin: 0;
-  font-weight: 600;
-  letter-spacing: 1px;
-}
 
 .report-info-section {
   padding: 16px 32px;
@@ -369,7 +361,7 @@
     gap: 16px;
   }
 
-  .logo-placeholder {
+  .lab-logo {
     width: 60px;
     height: 60px;
   }
@@ -377,10 +369,6 @@
   .lab-title h1 {
     font-size: 24px;
     margin: 0 0 4px 0;
-  }
-
-  .lab-title .subtitle {
-    font-size: 12px;
   }
 
   .report-info-section {
@@ -532,7 +520,7 @@
     text-align: center;
   }
 
-  .logo-placeholder {
+  .lab-logo {
     width: 60px;
     height: 60px;
   }
