@@ -7,18 +7,23 @@ function ReportPreview({ customerData, reportData, onClose }) {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString)
-    return date.toLocaleDateString('en-US', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    })
+    const day = String(date.getDate()).padStart(2, '0')
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const year = date.getFullYear()
+    return `${day}-${month}-${year}`
   }
 
   const generateReportNumber = () => {
+    return `2509-000${String(Math.floor(Math.random() * 10000)).padStart(4, '0')}`
+  }
+
+  const generateLabId = () => {
     return `LAB-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 10000)).padStart(4, '0')}`
   }
 
   const reportNumber = generateReportNumber()
+  const labId = generateLabId()
+  const isUrineReport = reportData?.testType === 'urine'
 
   return (
     <div className="report-preview">
@@ -44,95 +49,147 @@ function ReportPreview({ customerData, reportData, onClose }) {
         <div className="report-content">
           <div className="report-header">
             <div className="header-top">
-              <svg className="heartbeat-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              <div className="logo-placeholder"></div>
               <div className="lab-title">
-                <h1>JAYAVEL CLINICAL LABORATORY</h1>
-                <p>Comprehensive Blood Testing Services</p>
-                <p>Phone: +91 9876543210 | Email: info@jayavellab.com</p>
+                <h1>SHERIN CLINICAL LAB</h1>
+                <p className="subtitle">SITHI CLINIC & MEDICALS</p>
               </div>
             </div>
           </div>
 
           <div className="report-info-section">
-            <div className="report-details-box">
-              <div className="details-column">
-                <h3>Patient Details</h3>
-                <div className="detail-row">
-                  <span className="detail-label">Name:</span>
-                  <span className="detail-value">{customerData?.name}</span>
-                </div>
-                <div className="detail-row">
-                  <span className="detail-label">Age/Gender:</span>
-                  <span className="detail-value">{customerData?.age} Years / {customerData?.gender}</span>
-                </div>
-                <div className="detail-row">
-                  <span className="detail-label">Phone:</span>
-                  <span className="detail-value">{customerData?.phone}</span>
-                </div>
+            <div className="info-grid">
+              <div className="info-item">
+                <span className="info-label">Lab ID No:</span>
+                <span className="info-value">{reportNumber}</span>
               </div>
-
-              <div className="details-column">
-                <h3>Report Details</h3>
-                <div className="detail-row">
-                  <span className="detail-label">Report No:</span>
-                  <span className="detail-value">{reportNumber}</span>
+              <div className="info-item">
+                <span className="info-label">Pt's Name:</span>
+                <span className="info-value">Mr./Mrs. {customerData?.name}</span>
+              </div>
+              <div className="info-item">
+                <span className="info-label">Collection Date:</span>
+                <span className="info-value">{formatDate(isUrineReport ? reportData?.collectionDate : reportData?.testDate)}</span>
+              </div>
+              <div className="info-item">
+                <span className="info-label">Age & Sex:</span>
+                <span className="info-value">{customerData?.age} / {customerData?.gender === 'Male' ? 'MALE' : customerData?.gender === 'Female' ? 'FEMALE' : 'OTHER'}</span>
+              </div>
+              {isUrineReport && (
+                <div className="info-item">
+                  <span className="info-label">Received Date:</span>
+                  <span className="info-value">{formatDate(reportData?.receivedDate)}</span>
                 </div>
-                <div className="detail-row">
-                  <span className="detail-label">Test Date:</span>
-                  <span className="detail-value">{formatDate(reportData?.testDate)}</span>
-                </div>
-                <div className="detail-row">
-                  <span className="detail-label">Report Date:</span>
-                  <span className="detail-value">{formatDate(reportData?.reportDate)}</span>
-                </div>
+              )}
+              <div className="info-item">
+                <span className="info-label">Ref. by Dr.:</span>
+                <span className="info-value">{reportData?.doctorName || 'N/A'}</span>
+              </div>
+              <div className="info-item">
+                <span className="info-label">Report Date:</span>
+                <span className="info-value">{formatDate(reportData?.reportDate)}</span>
               </div>
             </div>
+            <div className="barcode-section">
+              <div className="barcode-placeholder"></div>
+            </div>
+            <div className="final-report-badge">Final Report</div>
+            <div className="page-indicator">Page 2 of 2</div>
           </div>
 
           <div className="test-results-section">
-            <h2>BLOOD TEST RESULTS</h2>
+            <h2 className="section-title">CLINICAL PATHOLOGY REPORT</h2>
 
-            <table className="results-table">
-              <thead>
-                <tr>
-                  <th>Test Name</th>
-                  <th>Result</th>
-                  <th>Unit</th>
-                  <th>Normal Range</th>
-                </tr>
-              </thead>
-              <tbody>
-                {reportData?.tests && reportData.tests.map((test, index) => (
-                  <tr key={index}>
-                    <td>{test.testName === 'Custom Test' ? test.customTestName : test.testName}</td>
-                    <td className="result-value">{test.value}</td>
-                    <td>{test.unit}</td>
-                    <td>{test.normalRange}</td>
+            {!isUrineReport ? (
+              <table className="results-table">
+                <thead>
+                  <tr>
+                    <th>Sample</th>
+                    <th>Investigation</th>
+                    <th>Result</th>
+                    <th>Units</th>
+                    <th>Normal Range & Methods</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {reportData?.tests && reportData.tests.map((test, index) => (
+                    <tr key={index}>
+                      <td>Blood</td>
+                      <td>{test.testName === 'Custom Test' ? test.customTestName : test.testName}</td>
+                      <td className="result-value">{test.value}</td>
+                      <td>{test.unit}</td>
+                      <td>{test.normalRange}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <>
+                <h3 className="subsection-title">Urine Analysis</h3>
+                <table className="results-table">
+                  <thead>
+                    <tr>
+                      <th>Sample</th>
+                      <th>Investigation</th>
+                      <th>Result</th>
+                      <th>Units</th>
+                      <th>Normal Range & Methods</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {reportData?.analysisTests && reportData.analysisTests.map((test, index) => (
+                      <tr key={index}>
+                        <td>Urine</td>
+                        <td>{test.testName}</td>
+                        <td className="result-value">{test.value}</td>
+                        <td></td>
+                        <td>{test.normalRange}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+
+                <h3 className="subsection-title microscopic-title">Deposits (Microscopic Examination)</h3>
+                <table className="results-table">
+                  <tbody>
+                    {reportData?.microscopicTests && reportData.microscopicTests.map((test, index) => (
+                      <tr key={index}>
+                        <td>Urine</td>
+                        <td>{test.testName}</td>
+                        <td className="result-value">{test.value}</td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </>
+            )}
           </div>
 
-          {reportData?.notes && (
-            <div className="notes-section">
-              <p><strong>Notes:</strong> {reportData.notes}</p>
-            </div>
-          )}
+          <div className="end-of-report">End of Report</div>
 
           <div className="report-footer">
-            <div className="signature-line">
-              <div className="signature-space"></div>
-              <p className="signature-label">Lab Director Signature</p>
-              <p className="signature-date">Date: {formatDate(reportData?.reportDate)}</p>
+            <div className="footer-note">
+              <p className="disclaimer">*Result may vary depending on factors like quality of specimen, time of sampling, reagent kit used, food intake, sensitivity & specificity of assay, processing, assay if done / correlation with clinical findings</p>
+              <p className="disclaimer">*Clinical Laboratory investigation never confirm the final diagnosis of the disease. All reports need to be correlated with clinical and other findings</p>
             </div>
 
-            <div className="footer-text">
-              <p>This is a computer generated report</p>
-              <p>Authorized by Jayavel Clinical Laboratory</p>
-              <p>For any queries, please contact us at +91 9876543210</p>
+            <div className="signature-section">
+              <div className="signature-box">
+                <div className="signature-line"></div>
+                <p className="signature-label">Lab technologist</p>
+              </div>
+            </div>
+
+            <div className="contact-info">
+              <p><strong>No.88, TTP Road, Azad Nagar,</strong></p>
+              <p><strong>Muthupet - 614704, Thiruvarur - Dist</strong></p>
+              <div className="contact-details">
+                <span>📞 04369 299956</span>
+                <span>📞 +91 97886 14530</span>
+                <span>✉ sherinclinicallab@gmail.com</span>
+              </div>
             </div>
           </div>
         </div>

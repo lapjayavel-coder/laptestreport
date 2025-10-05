@@ -11,6 +11,8 @@ function CustomerForm({ onSubmit, initialData }) {
     address: ''
   })
 
+  const [testType, setTestType] = useState('blood')
+
   useEffect(() => {
     if (initialData) {
       setFormData(initialData)
@@ -27,7 +29,7 @@ function CustomerForm({ onSubmit, initialData }) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    onSubmit(formData)
+    onSubmit(formData, testType)
   }
 
   return (
@@ -140,6 +142,32 @@ function CustomerForm({ onSubmit, initialData }) {
             placeholder="Full address"
             rows="3"
           />
+        </div>
+
+        <div className="form-group full-width">
+          <label>Test Type *</label>
+          <div className="test-type-selection">
+            <label className="radio-option">
+              <input
+                type="radio"
+                name="testType"
+                value="blood"
+                checked={testType === 'blood'}
+                onChange={(e) => setTestType(e.target.value)}
+              />
+              <span>Blood Test</span>
+            </label>
+            <label className="radio-option">
+              <input
+                type="radio"
+                name="testType"
+                value="urine"
+                checked={testType === 'urine'}
+                onChange={(e) => setTestType(e.target.value)}
+              />
+              <span>Urine Test</span>
+            </label>
+          </div>
         </div>
 
         <div className="form-actions">

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import CustomerForm from './components/CustomerForm'
 import BloodReportForm from './components/BloodReportForm'
+import UrineReportForm from './components/UrineReportForm'
 import ReportPreview from './components/ReportPreview'
 import './App.css'
 
@@ -8,14 +9,16 @@ function App() {
   const [currentView, setCurrentView] = useState('registration')
   const [customerData, setCustomerData] = useState(null)
   const [reportData, setReportData] = useState(null)
+  const [testType, setTestType] = useState('blood')
 
-  const handleCustomerSubmit = (data) => {
+  const handleCustomerSubmit = (data, selectedTestType) => {
     setCustomerData(data)
+    setTestType(selectedTestType)
     setCurrentView('report')
   }
 
   const handleReportSubmit = (data) => {
-    setReportData(data)
+    setReportData({ ...data, testType })
     setCurrentView('preview')
   }
 
@@ -23,6 +26,7 @@ function App() {
     setCurrentView('registration')
     setCustomerData(null)
     setReportData(null)
+    setTestType('blood')
   }
 
   const handleCancel = () => {
@@ -63,8 +67,17 @@ function App() {
             />
           )}
 
-          {currentView === 'report' && (
+          {currentView === 'report' && testType === 'blood' && (
             <BloodReportForm
+              onSubmit={handleReportSubmit}
+              onCancel={handleCancel}
+              initialData={reportData}
+              customerData={customerData}
+            />
+          )}
+
+          {currentView === 'report' && testType === 'urine' && (
+            <UrineReportForm
               onSubmit={handleReportSubmit}
               onCancel={handleCancel}
               initialData={reportData}
